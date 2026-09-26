@@ -276,18 +276,39 @@ button { font: inherit; color: inherit; }
 .depot-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
 .eyebrow { display: block; margin-bottom: 10px; font-family: var(--head); font-weight: 800; font-size: 0.95rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--hazard); }
 .depot-count { margin: 16px 0 22px; color: var(--ink-soft); font-size: 0.9rem; }
-.masonry { columns: 4 246px; column-gap: 18px; }
-.meme {
-  break-inside: avoid; margin: 0 0 18px; border-radius: 16px; overflow: hidden;
-  background: rgba(6, 18, 43, 0.4); border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* Pinned paper photos: cream frame, glass bead pin, small alternating tilt */
+.meme-wall { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px 22px; align-items: start; padding: 12px 5px; }
+.meme-pin {
+  position: relative; margin: 0; padding: 7px 7px 0; border-radius: 7px;
+  background: #f3ece0; color: #1b2a4a;
+  box-shadow: 0 7px 15px rgba(3, 12, 36, 0.45);
+  transform: rotate(var(--pin-rotation, 0deg));
+  transition: transform 0.18s ease;
 }
-.meme:hover { transform: translateY(-4px) rotate(-0.6deg); box-shadow: 0 18px 40px rgba(3, 10, 30, 0.45); }
+.meme-pin::before {
+  content: ''; position: absolute; z-index: 2; left: calc(50% - 4.5px); top: -5px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, #eef6ff, #8fc6ff 45%, #2a6fe0);
+  box-shadow: 1px 3px 3px rgba(3, 12, 36, 0.45);
+}
+.meme-pin:hover, .meme-pin:focus-within { transform: rotate(0deg); z-index: 3; }
+.meme-pin-image { position: relative; }
 .meme-open { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
-.meme img { width: 100%; height: auto; }
-.meme figcaption { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; font-weight: 800; font-size: 0.9rem; }
-.meme-dl { width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.08); cursor: pointer; font-weight: 800; }
-.meme-dl:hover { background: var(--hazard); color: var(--navy-deep); }
+.meme-pin-image img { display: block; width: 100%; height: auto; border-radius: 3px; }
+.meme-download {
+  position: absolute; right: 8px; bottom: 8px; display: grid; place-items: center;
+  width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(10, 27, 61, 0.85); color: #f4f8ff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.27);
+  transition: background 0.15s, color 0.15s;
+}
+.meme-download:hover { background: #bfe0ff; color: var(--navy); }
+.meme-pin figcaption {
+  display: flex; justify-content: space-between; gap: 8px;
+  padding: 12px 5px 11px; font-size: 11px; font-weight: 700;
+}
+.meme-pin figcaption span { color: var(--hazard-deep); }
 
 .lightbox { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: rgba(4, 12, 32, 0.72); backdrop-filter: blur(6px); animation: fade 0.2s ease; }
 @keyframes fade { from { opacity: 0; } }
@@ -360,6 +381,8 @@ button { font: inherit; color: inherit; }
 .radio-card h2 { font-family: var(--head); font-weight: 800; font-size: 30px; }
 .radio-card p { color: var(--ink-soft); margin-bottom: 6px; }
 .radio-note { font-size: 0.75rem; color: var(--ink-dim); }
+
+@media (max-width: 1100px) { .meme-wall { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }

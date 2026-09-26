@@ -4,6 +4,17 @@ import { Mascot } from './Mascot';
 import { SubmitMeme } from './SubmitMeme';
 import { CardHead } from './Workspace';
 
+// Small alternating tilts so the wall looks hand pinned rather than gridded.
+const PIN_TILTS = [-1.4, 1, -0.6, 1.6, -1, 0.7];
+
+function DownloadIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M12 3v12M7 10l5 5 5-5M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5" />
+    </svg>
+  );
+}
+
 async function downloadMeme(m: Meme) {
   const ext = m.src.endsWith('.svg') ? 'svg' : 'png';
   try {
@@ -48,17 +59,20 @@ export function MemeDepot() {
         {MEMES.length} memes and {TEMPLATES.length} blank templates. Unlimited good vibes. Stored on Walrus.
       </p>
 
-      <div className="masonry">
-        {all.map((m) => (
-          <figure className="meme" key={m.id}>
-            <button className="meme-open" onClick={() => setOpen(m)} aria-label={`Open ${m.title}`}>
-              <img src={m.src} alt={m.title} loading="lazy" />
-            </button>
-            <figcaption>
-              <span>{m.title}</span>
-              <button className="meme-dl" onClick={() => downloadMeme(m)} aria-label={`Download ${m.title}`}>
-                ↓
+      <div className="meme-wall">
+        {all.map((m, i) => (
+          <figure className="meme-pin" key={m.id} style={{ ['--pin-rotation' as string]: `${PIN_TILTS[i % PIN_TILTS.length]}deg` }}>
+            <div className="meme-pin-image">
+              <button className="meme-open" onClick={() => setOpen(m)} aria-label={`Open ${m.title}`}>
+                <img src={m.src} alt={m.title} loading="lazy" />
               </button>
+              <button className="meme-download" onClick={() => downloadMeme(m)} aria-label={`Download ${m.title}`} title="Download meme">
+                <DownloadIcon />
+              </button>
+            </div>
+            <figcaption>
+              {m.title}
+              <span aria-hidden>✦</span>
             </figcaption>
           </figure>
         ))}
