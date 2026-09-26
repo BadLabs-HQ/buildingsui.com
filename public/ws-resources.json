@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "/index.html": { "Cache-Control": "no-cache" }
+  },
+  "routes": {
+    "/*": "/index.html"
+  },
+  "metadata": {
+    "link": "https://buildingsui.wal.app",
+    "description": "Building Sui ($BUILD). A memecoin for the builders. Hosted on Walrus, built on Sui.",
+    "project_url": "https://buildingsui.com"
+  },
+  "site_name": "Building Sui",
+  "ignore": ["/.vite/*"]
+}
