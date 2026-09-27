@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useCurrentAccount, useCurrentClient, useCurrentWallet } from '@mysten/dapp-kit-react';
 import { ConnectButton } from '@mysten/dapp-kit-react/ui';
 import { toPng } from 'html-to-image';
-import { SOCIALS, TOKEN, isLaunched } from '../config';
+import { MARKET, SOCIALS, TOKEN, isLaunched } from '../config';
 import { formatUsd, type MarketStats } from '../lib/dexscreener';
 import { readJSON, writeJSON } from '../lib/storage';
 import { noPhantom } from '../lib/wallets';
@@ -42,8 +42,8 @@ function useBuildBalance(address?: string) {
     (async () => {
       try {
         const [bal, meta] = await Promise.all([
-          client.core.getBalance({ owner: address, coinType: TOKEN.coinType }),
-          client.core.getCoinMetadata({ coinType: TOKEN.coinType }),
+          client.core.getBalance({ owner: address, coinType: MARKET.coinType }),
+          client.core.getCoinMetadata({ coinType: MARKET.coinType }),
         ]);
         const decimals = meta.coinMetadata?.decimals ?? 9;
         if (alive) setBalance(Number(bal.balance.balance) / 10 ** decimals);
@@ -89,7 +89,7 @@ function WalletTab({ stats }: { stats: MarketStats | null }) {
     <div className="bag-body">
       <div className="bag-panels">
         <div className="bag-panel">
-          <span className="panel-label">Your ${TOKEN.ticker}</span>
+          <span className="panel-label">Your ${MARKET.ticker}</span>
           <span className="panel-value">
             {!account ? '—' : !live ? 'At launch' : error ? 'Unavailable' : balance == null ? '…' : fmtTokens(balance)}
           </span>
@@ -144,7 +144,7 @@ function EstimateTab({ stats }: { stats: MarketStats | null }) {
         <span className="panel-label">You get about</span>
         <span className="panel-value">{ready ? (tokens == null ? '—' : fmtTokens(tokens)) : 'At launch'}</span>
         <span className="panel-note">
-          {ready && tokens != null ? `$${TOKEN.ticker} · about ${formatUsd(tokens * stats.priceUsd)}` : `$${TOKEN.ticker}`}
+          {ready && tokens != null ? `$${MARKET.ticker} · about ${formatUsd(tokens * stats.priceUsd)}` : `$${MARKET.ticker}`}
         </span>
       </div>
       <p className="estimate-note">

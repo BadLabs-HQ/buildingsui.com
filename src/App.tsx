@@ -1,4 +1,4 @@
-import { TOKEN } from './config';
+import { MARKET } from './config';
 import { useMarketStats } from './lib/dexscreener';
 import { Scene } from './components/Scene';
 import { Hero } from './components/Hero';
@@ -10,7 +10,7 @@ import { Footer } from './components/Footer';
 import { MusicDock, RadioWelcome } from './components/Radio';
 
 export default function App() {
-  const { stats, stale } = useMarketStats(TOKEN.coinType);
+  const { stats, stale } = useMarketStats(MARKET.coinType);
 
   return (
     <>

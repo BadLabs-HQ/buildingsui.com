@@ -22,6 +22,7 @@ type DexPair = {
   pairAddress: string;
   priceUsd?: string;
   priceNative?: string;
+  baseToken?: { address?: string };
   quoteToken?: { symbol?: string };
   priceChange?: { h24?: number };
   volume?: { h24?: number };
@@ -30,13 +31,15 @@ type DexPair = {
   fdv?: number;
 };
 
-const CACHE_KEY = 'build:market:v2';
+// Keyed by coin so switching tokens at launch never shows the old coin's cached numbers.
+const cacheKey = (coinType: string) => `build:market:v3:${coinType}`;
 const REFRESH_MS = 30_000;
 
 async function fetchStats(coinType: string): Promise<MarketStats | null> {
-  const res = await fetch(`https://api.dexscreener.com/tokens/v1/sui/${encodeURIComponent(coinType)}`);
+  const res = await fetch(`https://api.dexscreener.com/token-pairs/v1/sui/${encodeURIComponent(coinType)}`);
   if (!res.ok) throw new Error(`Dexscreener ${res.status}`);
-  const pairs = (await res.json()) as DexPair[];
+  // Only pools where our coin is the base token: in the others the quoted price belongs to another coin.
+  const pairs = ((await res.json()) as DexPair[]).filter((p) => p.baseToken?.address === coinType);
   if (!pairs.length) return null;
   // The deepest pool gives the most honest price.
   const best = [...pairs].sort((a, b) => (b.liquidity?.usd ?? 0) - (a.liquidity?.usd ?? 0))[0];
@@ -57,7 +60,7 @@ async function fetchStats(coinType: string): Promise<MarketStats | null> {
 
 // Live stats with a cached fallback, so the numbers never go blank when the API hiccups.
 export function useMarketStats(coinType: string) {
-  const [stats, setStats] = useState<MarketStats | null>(() => readJSON<MarketStats>(CACHE_KEY));
+  const [stats, setStats] = useState<MarketStats | null>(() => readJSON<MarketStats>(cacheKey(coinType)));
   const [stale, setStale] = useState(false);
 
   useEffect(() => {
@@ -69,7 +72,7 @@ export function useMarketStats(coinType: string) {
         if (!alive || !next) return;
         setStats(next);
         setStale(false);
-        writeJSON(CACHE_KEY, next);
+        writeJSON(cacheKey(coinType), next);
       } catch {
         if (alive) setStale(true);
       }

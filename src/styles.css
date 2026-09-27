@@ -183,6 +183,11 @@ button { font: inherit; color: inherit; }
 .card-titles { flex: 1; }
 .card-titles h2 { font-family: var(--head); font-weight: 800; font-size: 26px; line-height: 1.1; }
 .card-titles p { font-size: 0.8rem; color: var(--ink-soft); margin-top: 2px; }
+.placeholder-badge {
+  display: inline-block; vertical-align: middle; margin-left: 6px; padding: 2px 8px; border-radius: 999px;
+  font-family: var(--body); font-size: 0.62rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--navy-deep); background: var(--hazard); cursor: help;
+}
 .card-ext { text-decoration: none; font-size: 1.2rem; color: var(--ink-soft); padding: 6px; }
 .card-ext:hover { color: var(--ink); }
 

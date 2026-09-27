@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { SOCIALS, TOKEN, isLaunched, links } from '../config';
+import { MARKET, SOCIALS, TOKEN, isLaunched, links } from '../config';
 import { formatUsd, type MarketStats } from '../lib/dexscreener';
 import { CopyButton } from './CopyButton';
 import { Mascot } from './Mascot';
@@ -21,6 +21,16 @@ export function CardHead({ icon, title, sub, href }: { icon: ReactNode; title: R
   );
 }
 
+// Shown on every data section while another token stands in for $BUILD.
+export function PlaceholderBadge() {
+  if (!MARKET.placeholder) return null;
+  return (
+    <span className="placeholder-badge" title={`$${TOKEN.ticker} has not launched. $${MARKET.ticker} data is shown as a stand in.`}>
+      Placeholder
+    </span>
+  );
+}
+
 export function ChartCard({ stats }: { stats: MarketStats | null }) {
   const [reload, setReload] = useState(0);
   const live = isLaunched();
@@ -30,8 +40,12 @@ export function ChartCard({ stats }: { stats: MarketStats | null }) {
     <section className="chart-card glass">
       <CardHead
         icon={<Mascot size={40} />}
-        title={`$${TOKEN.ticker}`}
-        sub={`${TOKEN.ticker} / SUI · Price chart from Dexscreener`}
+        title={
+          <>
+            ${MARKET.ticker} <PlaceholderBadge />
+          </>
+        }
+        sub={`${MARKET.ticker} / ${stats?.quoteSymbol ?? 'SUI'} · Price chart from Dexscreener`}
         href={live ? stats?.pairUrl ?? 'https://dexscreener.com/sui' : undefined}
       />
       <div className="price-line">
@@ -48,7 +62,7 @@ export function ChartCard({ stats }: { stats: MarketStats | null }) {
         {live && stats?.pairAddress ? (
           <iframe
             key={reload}
-            title={`${TOKEN.ticker} chart on Dexscreener`}
+            title={`${MARKET.ticker} chart on Dexscreener`}
             src={`https://dexscreener.com/sui/${stats.pairAddress}?embed=1&theme=dark&info=0&trades=0`}
           />
         ) : (
@@ -93,11 +107,13 @@ export function TokenCard() {
         partners. Just builders, memes, and a hard hat for every holder.
       </p>
       <div className="contract">
-        <span className="contract-label">{TOKEN.ticker} contract · Sui</span>
+        <span className="contract-label">
+          {MARKET.ticker} contract · Sui <PlaceholderBadge />
+        </span>
         {live ? (
           <div className="contract-row">
-            <code>{`${TOKEN.coinType.slice(0, 10)}…${TOKEN.coinType.slice(-14)}`}</code>
-            <CopyButton text={TOKEN.coinType} label="Copy" />
+            <code>{`${MARKET.coinType.slice(0, 10)}…${MARKET.coinType.slice(-18)}`}</code>
+            <CopyButton text={MARKET.coinType} label="Copy" />
           </div>
         ) : (
           <div className="contract-row">
@@ -106,8 +122,8 @@ export function TokenCard() {
         )}
       </div>
       {live ? (
-        <a className="btn btn-go wide" href={links.cetusSwap(TOKEN.coinType)} target="_blank" rel="noreferrer">
-          Buy on Cetus
+        <a className="btn btn-go wide" href={links.buySwap(MARKET.coinType)} target="_blank" rel="noreferrer">
+          Buy ${MARKET.ticker} on Aftermath
         </a>
       ) : (
         <button className="btn btn-go wide" disabled>

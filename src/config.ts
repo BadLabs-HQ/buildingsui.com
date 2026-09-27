@@ -1,11 +1,8 @@
-// Everything that changes at launch lives here.
-// Fill in COIN_TYPE and the site flips from "before launch" to live mode.
+// Everything that changes at launch lives here. The coin itself is set in MARKET below.
 
 export const TOKEN = {
   name: 'Building Sui',
   ticker: 'BUILD',
-  // Full Sui coin type, for example '0xabc...::build::BUILD'. Empty until launch.
-  coinType: '',
   // ISO date string for the countdown, for example '2026-11-01T16:00:00Z'. Empty shows "TBA".
   launchAt: '',
 };
@@ -31,10 +28,19 @@ export const WALRUS = {
 };
 
 export const links = {
-  cetusSwap: (coinType: string) =>
-    `https://app.cetus.zone/swap/?from=0x2::sui::SUI&to=${encodeURIComponent(coinType)}`,
+  // Aftermath's aggregator honours the coin in the link (Cetus drops it), and routes across all Sui DEXs.
+  buySwap: (coinType: string) => `https://aftermath.finance/trade?from=0x2::sui::SUI&to=${coinType}`,
   suiscanCoin: (coinType: string) => `https://suiscan.xyz/mainnet/coin/${encodeURIComponent(coinType)}`,
   walrusBlob: (blobId: string) => `${WALRUS.aggregator}/v1/blobs/${blobId}`,
 };
 
-export const isLaunched = () => TOKEN.coinType.length > 0;
+// The token behind the price, chart, stats, wallet balance and buy button.
+// Until $BUILD launches, $MANIFEST stands in so every data section works end to end.
+// At launch: set coinType and ticker to $BUILD's and placeholder to false.
+export const MARKET = {
+  ticker: 'MANIFEST',
+  coinType: '0xc466c28d87b3d5cd34f3d5c088751532d71a38d93a8aae4551dd56272cfb4355::manifest::MANIFEST',
+  placeholder: true,
+};
+
+export const isLaunched = () => MARKET.coinType.length > 0;

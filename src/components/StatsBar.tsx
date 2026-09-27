@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { TOKEN, isLaunched } from '../config';
+import { MARKET, TOKEN, isLaunched } from '../config';
 import { formatUsd, type MarketStats } from '../lib/dexscreener';
 
 function useCountdown(target: string) {
@@ -34,7 +34,7 @@ export function StatsBar({ stats, stale }: { stats: MarketStats | null; stale: b
       note: live ? `Price ${formatUsd(stats?.priceUsd, false)}` : 'Last 24 hours',
       tone: live && change != null ? (change >= 0 ? 'up' : 'down') : '',
     },
-    live
+    live && !MARKET.placeholder
       ? { label: 'Status', value: 'Live on Sui', note: 'Contract below', tone: 'up' }
       : { label: 'Launch countdown', value: countdown ?? 'Date TBA', note: countdown ? 'Hard hats on' : 'Announced on X first' },
   ];
@@ -44,7 +44,7 @@ export function StatsBar({ stats, stale }: { stats: MarketStats | null; stale: b
       <div className="status-line">
         {live
           ? stats
-            ? `Market updated ${new Date(stats.fetchedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}${stale ? ' · showing last known numbers' : ''}`
+            ? `${MARKET.placeholder ? `Placeholder data: $${MARKET.ticker} until $${TOKEN.ticker} launches · ` : ''}Market updated ${new Date(stats.fetchedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}${stale ? ' · showing last known numbers' : ''}`
             : 'Connecting to Dexscreener…'
           : 'Before launch · stats switch on the moment $' + TOKEN.ticker + ' is live'}
       </div>
@@ -52,7 +52,7 @@ export function StatsBar({ stats, stale }: { stats: MarketStats | null; stale: b
         {cells.map((c) => (
           <div className="stat" key={c.label}>
             <span className="stat-label">{c.label}</span>
-            <span className={`stat-value ${c.tone ?? ''} ${live ? '' : c.label === 'Launch countdown' ? 'countdown' : 'pending'}`}>
+            <span className={`stat-value ${c.tone ?? ''} ${c.label === 'Launch countdown' ? 'countdown' : live ? '' : 'pending'}`}>
               {c.value}
             </span>
             <span className="stat-note">{c.note}</span>
