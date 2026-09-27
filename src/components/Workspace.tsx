@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react';
-import { MARKET, SOCIALS, TOKEN, isLaunched, links } from '../config';
+import { MARKET, SOCIALS, TOKEN, isLaunched } from '../config';
 import { formatUsd, type MarketStats } from '../lib/dexscreener';
+import { BuyBox } from './BuyBox';
 import { CopyButton } from './CopyButton';
 import { Mascot } from './Mascot';
 
@@ -122,9 +123,7 @@ export function TokenCard() {
         )}
       </div>
       {live ? (
-        <a className="btn btn-go wide" href={links.buySwap(MARKET.coinType)} target="_blank" rel="noreferrer">
-          Buy ${MARKET.ticker} on Aftermath
-        </a>
+        <BuyBox />
       ) : (
         <button className="btn btn-go wide" disabled>
           Buy opens at launch

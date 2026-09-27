@@ -219,6 +219,22 @@ button { font: inherit; color: inherit; }
 .contract-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .contract-row code { font-family: var(--mono); font-size: 0.8rem; color: var(--ink); }
 
+/* In page buy box, swaps through the Cetus aggregator */
+.buy-box { display: grid; gap: 10px; }
+.buy-field { padding: 12px 14px; border-radius: 14px; background: rgba(6, 18, 43, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); }
+.buy-field:focus-within { border-color: rgba(255, 200, 61, 0.6); }
+.buy-field-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; font-weight: 700; color: var(--ink-soft); margin-bottom: 4px; }
+.buy-field .input-row input, .buy-out { font-size: 24px; }
+.buy-out { flex: 1; font-family: var(--head); font-weight: 800; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; }
+.buy-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 0.75rem; }
+.slippage { display: flex; align-items: center; gap: 4px; color: var(--ink-soft); font-weight: 700; }
+.slippage span { margin-right: 2px; }
+.slippage button { padding: 3px 8px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.15); background: none; font-size: 0.72rem; font-weight: 800; cursor: pointer; color: var(--ink-soft); }
+.slippage button.on { background: rgba(255, 255, 255, 0.16); color: var(--ink); border-color: rgba(255, 255, 255, 0.3); }
+.buy-route { font-size: 0.72rem; color: var(--ink-dim); }
+.buy-done { font-weight: 800; color: var(--up); }
+.buy-done a { color: var(--ink); }
+.buy-box mysten-dapp-kit-connect-button { display: block; }
 .vibe-card { padding: 22px; display: flex; flex-direction: column; gap: 16px; }
 .vibe-read { color: var(--ink-soft); }
 .vibe-read b { color: var(--hazard); }

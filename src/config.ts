@@ -28,8 +28,6 @@ export const WALRUS = {
 };
 
 export const links = {
-  // Aftermath's aggregator honours the coin in the link (Cetus drops it), and routes across all Sui DEXs.
-  buySwap: (coinType: string) => `https://aftermath.finance/trade?from=0x2::sui::SUI&to=${coinType}`,
   suiscanCoin: (coinType: string) => `https://suiscan.xyz/mainnet/coin/${encodeURIComponent(coinType)}`,
   walrusBlob: (blobId: string) => `${WALRUS.aggregator}/v1/blobs/${blobId}`,
 };
